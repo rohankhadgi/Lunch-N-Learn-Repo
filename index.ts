@@ -30,20 +30,40 @@ colors$.pipe(
 ).subscribe(colorOfTheCars);
 
 colorOfTheCars$.pipe(
-  tap(x => console.log(x))
+  //tap(x => console.log(x))
 ).subscribe();
 
-var colorType: string;
+colorOfTheCars$.pipe(distinctUntilChanged()).subscribe(noRepeatColors);
 
-colorOfTheCars$.pipe(
-  map(x => {
-    colorType = x.color,
-    if(x.color)
-    {
-      tap(x => console.log(x))
-    }
-  })
-)
+const skipFirstThree = new Subject<any>();
+const skipFirstThree$: Observable<any> = skipFirstThree;
+
+noRepeatColors$.pipe(
+  skip(3)
+).subscribe(skipFirstThree);
+
+skipFirstThree$.pipe(
+  //tap(x => console.log(x))
+).subscribe();
+
+const firstFiveCars = new Subject<any>();
+const firstFiveCars$: Observable<any> = firstFiveCars;
+
+cars$.pipe(
+  take(5),
+  //tap(x => console.log(x))
+).subscribe(firstFiveCars);
+
+const onlyBlueCars = new Subject<any>();
+const onlyBlueCars$: Observable<any> = onlyBlueCars;
+
+cars$.pipe(
+  filter(x => x.color === 'blue'),
+  debounceTime(2000),
+  tap(x => console.log(x)
+)).subscribe(onlyBlueCars);
+
+
 
 // EXERCISES
 // TIP: whenever you start at the next exercise it's recommended to refresh to result browser
