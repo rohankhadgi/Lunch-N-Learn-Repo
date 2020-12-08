@@ -1,5 +1,5 @@
 import { Subject, combineLatest, merge, race, interval, Observable } from 'rxjs';
-import { filter, distinct, skipUntil, map, first, average, distinctUntilChanged, skip, take, tap, delay, debounceTime, mergeMap } from 'rxjs/operators';
+import { filter, distinct, skipUntil, map, first, average, distinctUntilChanged, skip, take, tap, delay, debounceTime, mergeMap, concat } from 'rxjs/operators';
 
 import { Car } from './types/car.type';
 import { Truck } from './types/truck.type';
@@ -63,6 +63,7 @@ cars$.pipe(
   tap(x => console.log(x)
 )).subscribe(onlyBlueCars);
 
+const carsAndTrucks = concat(cars$,trucks$);
 
 
 // EXERCISES
